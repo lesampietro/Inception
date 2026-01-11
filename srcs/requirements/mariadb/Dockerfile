@@ -10,7 +10,8 @@ RUN			apt update -y && \
 
 COPY		config/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN			chmod +x /usr/local/bin/entrypoint.sh
+RUN			chmod +x /usr/local/bin/entrypoint.sh && \
+			chown -R mysql:mysql /usr/local/bin/entrypoint.sh
 
 RUN			mkdir -p /var/run/mysqld && \
 			mkdir -p /var/lib/mysql && \
@@ -19,6 +20,7 @@ RUN			mkdir -p /var/run/mysqld && \
 
 EXPOSE		3306
 
-ENTRYPOINT	["/usr/local/bin/entrypoint.sh"]
+CMD			["/usr/local/bin/entrypoint.sh"]
 
-CMD			["mysqld", "--user=mysql"]
+# CMD			["mysqld", "--user=mysql"]
+# CMD			["cat", "/usr/local/bin/entrypoint.sh"]
