@@ -72,10 +72,10 @@ volumes:
 
 secrets:
   mariadb_root_password:
-    file: ./secrets/db_root_password.txt
+    file: ../secrets/db_root_password.txt
   mariadb_password:
-    file: ./secrets/db_password.txt
+    file: ../secrets/db_password.txt
   wp_admin_password:
-    file: ./secrets/credentials.txt
+    file: ../secrets/credentials.txt
   wp_user_password:
-    file: ./secrets/credentials.txt
+    file: ../secrets/credentials.txt
