@@ -1,0 +1,74 @@
+docker run --name nome-do-container -it nome-da-imagem
+docker run -d (detached) -i (iterative)
+docker start -a (attached) -i nome-do-container
+docker stop nome-do-container
+-d: roda em background
+-a: anexa o terminal à saída padrão do container (stdout/stderr)
+docker images: lista as imagens que ja foram geradas
+docker container prune: apaga todos os containers parados
+docker rm -f id-do-container -> força a parada e remove o container parado
+
+docker run -P (expoe a porta)
+docker run -p (mapeia a porta manualmente) 80:80 nome-da-imagem
+
+docker build -t nome-imagem:v1 
+
+--------------------------------------------------------------------------------
+* Volumes: 
+Volumes are persistent data stores for containers, created and managed by Docker. Docker can create a volume during container or service creation.
+
+When you create a volume, it's stored within a directory on the Docker host. When you mount the volume into a container, this directory is what's mounted into the container. This is similar to the way that bind mounts work, except that volumes are managed by Docker and are isolated from the core functionality of the host machine.
+
+Volumes are not a good choice if you need to access the files from the host, as the volume is completely managed by Docker.
+
+Volumes are often a better choice than writing data directly to a container, because a volume doesn't increase the size of the containers using it. 
+
+** A volume's lifecycle:
+A volume's contents exist outside the lifecycle of a given container. When a container is destroyed, the writable layer is destroyed with it. Using a volume ensures that the data is persisted even if the container using it is removed.
+
+A given volume can be mounted into multiple containers simultaneously. When no running container is using a volume, the volume is still available to Docker and isn't removed automatically. You can remove unused volumes using < docker volume prune >.
+--------------------------------------------------------------------------------
+
+* Docker Compose:
+Docker Compose is a tool for defining and running multi-container applications. It is the key to unlocking a streamlined and efficient development and deployment experience.
+
+Simplified control: Define and manage multi-container apps in one YAML file, streamlining orchestration and replication.
+
+Efficient collaboration: Shareable YAML files support smooth collaboration between developers and operations, improving workflows and issue resolution, leading to increased overall efficiency.
+
+Rapid application development: Compose caches the configuration used to create a container. When you restart a service that has not changed, Compose re-uses the existing containers. Re-using containers means that you can make changes to your environment very quickly.
+
+Portability across environments: Compose supports variables in the Compose file. You can use these variables to customize your composition for different environments, or different users.
+
+--------------------------------------------------------------------------------
+* Services:
+A Compose file must declare a services top-level element as a map whose keys are string representations of service names, and whose values are service definitions. A service definition contains the configuration that is applied to each service container.
+
+** Build: 
+Each service may also include a build section, which defines how to create the Docker image for the service. < build > can be either specified as a single string defining a context path, or as a detailed build definition. The whole path is used as a Docker context to execute a Docker build, looking for a canonical Dockerfile at the root of the directory. 
+
+--------------------------------------------------------------------------------
+* TLS:
+Segurança da Camada de Transporte  ( TLS ) é um protocolo Garantir a segurança das trocas de informações por meio de redes de computadores , particularmente pela Internet .
+O TLS permite:
+
+- autenticação do servidor
+- a confidencialidade dos dados trocados(ou sessão criptografada)
+- a integridade dos dados trocados
+- opcionalmente, autenticação do cliente(mas na realidade isso geralmente é tratado pela camada de aplicação)
+
+Baseado no SSL 3.0,  o TLS foi introduzido em 1999 como a nova versão do SSL.
+
+O protocolo TLS é, portanto, simplesmente o substituto do SSL. Ele corrige certas falhas E vulnerabilidades de segurança em protocolos SSL mais antigos.
+
+--------------------------------------------------------------------------------
+* NGINX:
+Permite configurar um servidor web. 
+
+--------------------------------------------------------------------------------
+* Alpine X Debian:
+Linux Alpine é uma distribuição Linux leve e orientada à segurança; ela contém o mínimo possível de arquivos e ferramentas para permitir que o desenvolvedor os instale por conta própria, se necessário.
+
+Debian é o sistema operacional universal. Os sistemas Debian atualmente usam o kernel Linux ou o kernel FreeBSD.
+
+

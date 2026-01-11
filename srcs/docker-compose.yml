@@ -1,0 +1,81 @@
+services:
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    depends_on:
+      wordpress:
+        condition: service_started
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    networks:
+      - my-network
+    restart: always
+ 
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - my-network
+    env_file: 
+      - .env
+    secrets:
+      - mariadb_root_password
+      - mariadb_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    networks:
+      - my-network
+    secrets:
+      - wp_admin_password
+      - wp_user_password
+      - mariadb_password
+    env_file: 
+      - .env
+    restart: always
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/cadete/data/mariadb
+
+  wordpress_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/cadete/data/wordpress
+
+secrets:
+  mariadb_root_password:
+    file: ./secrets/db_root_password.txt
+  mariadb_password:
+    file: ./secrets/db_password.txt
+  wp_admin_password:
+    file: ./secrets/credentials.txt
+  wp_user_password:
+    file: ./secrets/credentials.txt
