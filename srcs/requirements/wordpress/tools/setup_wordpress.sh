@@ -23,12 +23,10 @@ echo "MariaDB is ready! Setting up WordPress..."
 
 # Download and configure WordPress if not present
 if [ ! -e "${WP_PATH}/wp-includes/version.php" ]; then
-    echo "AAAAAAAAAAAAAAAAAAAAAA"
     wp core download --allow-root --path="${WP_PATH}"
 fi
 
 if [ ! -f "${WP_PATH}/wp-config.php" ]; then
-    echo "AAAAAAAAAAAAAAHHHHH"
     wp config create \
         --allow-root \
         --path="${WP_PATH}" \

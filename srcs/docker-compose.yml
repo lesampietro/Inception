@@ -26,7 +26,7 @@ services:
       - mariadb_root_password
       - mariadb_password
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$(cat /run/secrets/mariadb_root_password)"]
       interval: 10s
       timeout: 5s
       retries: 5

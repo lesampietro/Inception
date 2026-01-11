@@ -1,7 +1,6 @@
 COMPOSE = docker compose -f ./srcs/docker-compose.yml -p inception
 SERVICES ?=
 DATA_DIR ?= $(HOME)/data
-# DATA_DIR ?= ../home/cadete/data
 
 all: secrets create-dirs build
 	$(COMPOSE) up -d $(SERVICES)
