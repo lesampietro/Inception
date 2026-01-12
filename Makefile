@@ -1,6 +1,6 @@
 COMPOSE = docker compose -f ./srcs/docker-compose.yml -p inception
 SERVICES ?=
-DATA_DIR ?= $(HOME)/data
+DATA_DIR ?= /home/lsampiet/data
 
 all: secrets create-dirs build
 	$(COMPOSE) up -d $(SERVICES)
@@ -9,8 +9,8 @@ build:
 	@$(COMPOSE) build $(SERVICES)
 
 create-dirs:
-	@mkdir -p $(DATA_DIR)/mariadb
-	@mkdir -p $(DATA_DIR)/wordpress
+	@sudo mkdir -p $(DATA_DIR)/mariadb
+	@sudo mkdir -p $(DATA_DIR)/wordpress
 
 secrets:
 	@if [ ! -d secrets ]; then mkdir -p secrets; fi

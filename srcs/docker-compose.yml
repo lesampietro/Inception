@@ -61,14 +61,14 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /home/cadete/data/mariadb
+      device: /home/lsampiet/data/mariadb
 
   wordpress_data:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /home/cadete/data/wordpress
+      device: /home/lsampiet/data/wordpress
 
 secrets:
   mariadb_root_password:
