@@ -37,4 +37,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all re down clean create-dirs secrets fclean build prune
+db:
+	@docker exec -it mariadb mariadb -u root -p$$(cat secrets/db_root_password.txt)
+
+.PHONY: all re down clean create-dirs secrets fclean build prune db
