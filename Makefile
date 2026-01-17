@@ -25,7 +25,7 @@ down:
 	@$(COMPOSE) down
 
 clean:
-	$(COMPOSE) down --rmi all --volumes --remove-orphans
+	@$(COMPOSE) down --rmi all --volumes --remove-orphans
 
 prune:
 	@docker system prune -f
