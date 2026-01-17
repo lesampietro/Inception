@@ -16,7 +16,6 @@ RUN			apt update -y && \
 
 RUN         mkdir -p /etc/nginx/ssl \
 			&& openssl req -x509 -nodes -days 365 \
-			# -newkey rsa:2048 \
 			-out /etc/nginx/ssl/lsampiet.crt \
 			-keyout /etc/nginx/ssl/lsampiet.key \
 			-subj "/C=BR/ST=SP/L=SaoPaulo/O=42/OU=42SaoPaulo/CN=lsampiet.42.fr/UID=lsampiet"
