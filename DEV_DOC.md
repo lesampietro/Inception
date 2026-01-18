@@ -15,24 +15,24 @@ Before starting, ensure your host machine (Linux VM) has the following installed
 The project relies on environment variables to configure services dynamically. 
 
 1.  **Create the `.env` file**:
-    Navigate to `srcs/` and ensure a `.env` file exists. It should contain variables for domain names, database credentials, and paths. 
-    
-    *Example structure:*
-    ```dotenv
-    DOMAIN_NAME=lsampiet.42.fr
-    MYSQL_DATABASE=wordpress
-    MYSQL_USER=user
-    MYSQL_PASSWORD=userpass
-    MYSQL_ROOT_PASSWORD=rootpass
-    WP_ADMIN_USER=admin
-    WP_ADMIN_PASSWORD=adminpass
-    ```
+	Navigate to `srcs/` and ensure a `.env` file exists. It should contain variables for domain names, database credentials, and paths. 
+	
+	*Example structure:*
+	```dotenv
+	DOMAIN_NAME=lsampiet.42.fr
+	MYSQL_DATABASE=wordpress
+	MYSQL_USER=user
+	MYSQL_PASSWORD=userpass
+	MYSQL_ROOT_PASSWORD=rootpass
+	WP_ADMIN_USER=admin
+	WP_ADMIN_PASSWORD=adminpass
+	```
 
 2.  **Host Configuration**:
-    Map the domain name to localhost in your `/etc/hosts` file:
-    ```bash
-    echo "127.0.0.1 lsampiet.42.fr" >> /etc/hosts
-    ```
+	Map the domain name to localhost in your `/etc/hosts` file:
+	```bash
+	echo "127.0.0.1 lsampiet.42.fr" >> /etc/hosts
+	```
 
 ### Secrets Management
 This project uses Docker Secrets for sensitive data. 
@@ -44,16 +44,16 @@ This project uses Docker Secrets for sensitive data.
 The project is automated using a `Makefile` located at the root.
 
 *   **Build & Start (Default):**
-    Builds images ensuring secrets/volumes exist, then starts the cluster in detached mode.
-    ```bash
-    make
-    ```
+	Builds images ensuring secrets/volumes exist, then starts the cluster in detached mode.
+	```bash
+	make
+	```
 
 *   **Rebuild specific container:**
-    If you modify a Dockerfile (e.g., specific PHP extensions), you must force a rebuild:
-    ```bash
-    docker-compose -f srcs/docker-compose.yml build --no-cache <service_name>
-    ```
+	If you modify a Dockerfile (e.g., specific PHP extensions), you must force a rebuild:
+	```bash
+	docker-compose -f srcs/docker-compose.yml build --no-cache <service_name>
+	```
 
 ## 3. Container & Volume Management
 
@@ -67,6 +67,37 @@ Use these commands to manage the lifecycle of the infrastructure during developm
 | `make clean` | Stop execution and remove containers/networks. |
 | `docker logs -f <container>` | Follow the logs of a specific service (nginx, mariadb, wordpress) for debugging. |
 | `docker exec -it <container> bash` | Open a shell inside a running container to inspect files or run commands manually. |
+| `docker networks ls` | Display the list of volumes. |
+| `docker volume inspect <volume>` | Display the directory path to a specified volume. |
+| `docker port <container>` | Check which port is assigned to the specified container. |
+
+### Using MariaDB
+*	**Access the container via terminal use:**
+	```bash
+	docker exec -it mariadb bash
+	```
+*	**Login to maridb using:**
+	```bash
+	mysql -uroot -p
+	```
+You'll be prompted to input the root password. Get it from the `/secrets` directory.
+
+*   **Check if the database was created and everything is working:**
+	```bash
+	SHOW DATABASES; // show the databes
+
+	use wp-database; // go in the wordpress database
+
+	SHOW TABLES; // show all the tables from the database you selected
+
+	SHOW COLUMNS FROM wp_users; // show all the coumns from the selected table
+
+	SELECT ID, user_login FROM wp_users; // display users from wordpress database and find out user ID
+
+	SELECT ID, post_date, post_title, post_content FROM wp_posts WHERE post_author = (SELECT ID FROM wp_users WHERE user_login = 'lsampiet') AND post_type = 'post' \G; // display posts by user;
+
+	SELECT comment_ID, comment_date, comment_content, comment_author FROM wp_comments WHERE user_id = (SELECT ID FROM wp_users WHERE user_login = 'lsampiet') \G; // display comments by user;
+	```
 
 ## 4. Data Storage & Persistence
 
@@ -75,10 +106,10 @@ Data persistence is handled via **Docker Volumes** mapped to specific directorie
 ### Storage Locations
 According to the project subject requirements, data is stored in the user's home directory:
 
-*   **WordPress Files:** stored in `/home/$USER/data/wordpress`
-*   **Database Files:** stored in `/home/$USER/data/mariadb`
+*   **WordPress Files:** stored in `/home/lsampiet.42.fr/data/wordpress`
+*   **Database Files:** stored in `/home/lsampiet.42.fr/data/mariadb`
 
 ### How Persistence Works
 - **Docker Compose** defines named volumes (e.g., `wp_data`, `db_data`).
 - These volumes use the `driver_opts` feature (or direct bind mounts depending on implementation) to map the internal container paths (`/var/www/html`, `/var/lib/mysql`) to the physical paths on the host listed above.
-- **Result:** Even if containers are destroyed (`make down`), the data remains in `/home/$USER/data`. To completely wipe data, you must manually delete these folders or use `make fclean`.
+- **Result:** Even if containers are destroyed (`make down`), the data remains in `/home/lsampiet.42.fr/data`. To completely wipe data, you must manually delete these folders or use `make fclean`.

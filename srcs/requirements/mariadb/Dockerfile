@@ -10,8 +10,6 @@ RUN			apt update -y && \
 
 COPY		config/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-# COPY		config/my.cnf /etc/mysql/my.cnf
-
 RUN			chmod +x /usr/local/bin/entrypoint.sh && \
 			chown -R mysql:mysql /usr/local/bin/entrypoint.sh
 

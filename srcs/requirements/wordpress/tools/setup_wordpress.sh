@@ -18,7 +18,6 @@ for i in $(seq 1 30); do
     sleep 1
 done
 
-
 echo "MariaDB is ready! Setting up WordPress..."
 
 # Download and configure WordPress if not present
